@@ -15,6 +15,7 @@
 package prototests
 
 import (
+	"fmt"
 	"io"
 	"testing"
 
@@ -83,5 +84,23 @@ func TestExample(t *testing.T) {
 	}
 	if myvalue != "myvalue" {
 		t.Fatalf("want %v got %v", "myvalue", myvalue)
+	}
+}
+
+func TestWrongLenghtPanic(t *testing.T) {
+	data, err := NewMarshaledMyMessage()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("mymessage: %v\n", data)
+	data[1] = 12
+	fmt.Printf("mymessage: %v\n", data)
+	parser, err := NewMyMessageParser(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = GetMyField(parser)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
